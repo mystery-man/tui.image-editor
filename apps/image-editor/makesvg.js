@@ -15,16 +15,14 @@ function getFileList(dir) {
       const svg = fs.readFileSync(`${targetDir}/${file}`);
       sprites.add(id, svg);
     });
-    fs.writeFileSync(`./dist/svg/${dir}.svg`, sprites);
+    fs.writeFileSync(`./dist/svg/${dir}.svg`, sprites.toString());
   });
 }
 
-mkdirp('./dist/svg').then((path) => {
-  if (path) {
-    fs.readdir(svgDir, (err, dirs) => {
-      dirs.forEach((dir) => {
-        getFileList(dir);
-      });
+mkdirp('./dist/svg').then(() => {
+  fs.readdir(svgDir, (err, dirs) => {
+    dirs.forEach((dir) => {
+      getFileList(dir);
     });
-  }
+  });
 });

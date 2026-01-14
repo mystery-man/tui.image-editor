@@ -258,6 +258,8 @@ export const keyCodes = {
   SPACE: 32,
   DIGIT_0: 48,
   DIGIT_9: 57,
+  NUMPAD_0: 96,
+  NUMPAD_9: 105,
 };
 
 /**

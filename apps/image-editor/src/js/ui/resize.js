@@ -1,6 +1,6 @@
 import Submenu from '@/ui/submenuBase';
 import templateHtml from '@/ui/template/submenu/resize';
-import { assignmentForDestroy, toInteger } from '@/util';
+import { assignmentForDestroy } from '@/util';
 import Range from '@/ui/tools/range';
 import { defaultResizePixelValues } from '@/consts';
 
@@ -64,10 +64,10 @@ class Resize extends Submenu {
     this.setWidthValue(dimensions.width);
     this.setHeightValue(dimensions.height);
     this.setLimit({
-      minWidth: defaultResizePixelValues.min,
-      minHeight: defaultResizePixelValues.min,
-      maxWidth: dimensions.width,
-      maxHeight: dimensions.height,
+      minWidth: 1,
+      minHeight: 1,
+      maxWidth: 5000,
+      maxHeight: 5000,
     });
   }
 
@@ -183,8 +183,18 @@ class Resize extends Submenu {
    * @param {number} value - width range value
    * @private
    */
-  _changeWidthRangeHandler(value) {
-    this.actions.preview('width', toInteger(value), this._lockState);
+  _changeWidthRangeHandler(value, isLast) {
+    if (this._lockState) {
+      const { width, height } = this._originalDimensions;
+      const ratio = width / height;
+      this.setHeightValue(value / ratio);
+    }
+    if (isLast) {
+      this.actions.previewResize({
+        width: this._els.widthRange.value,
+        height: this._els.heightRange.value,
+      });
+    }
   }
 
   /**
@@ -192,8 +202,18 @@ class Resize extends Submenu {
    * @param {number} value - height range value
    * @private
    */
-  _changeHeightRangeHandler(value) {
-    this.actions.preview('height', toInteger(value), this._lockState);
+  _changeHeightRangeHandler(value, isLast) {
+    if (this._lockState) {
+      const { width, height } = this._originalDimensions;
+      const ratio = width / height;
+      this.setWidthValue(value * ratio);
+    }
+    if (isLast) {
+      this.actions.previewResize({
+        width: this._els.widthRange.value,
+        height: this._els.heightRange.value,
+      });
+    }
   }
 
   /**
@@ -216,7 +236,10 @@ class Resize extends Submenu {
   }
 
   _applyEventHandler() {
-    this.actions.resize();
+    this.actions.resize({
+      width: this._els.widthRange.value,
+      height: this._els.heightRange.value,
+    });
     this._els.apply.classList.remove('active');
   }
 

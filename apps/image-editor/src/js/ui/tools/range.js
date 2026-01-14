@@ -38,7 +38,6 @@ class Range {
     this._useDecimal = options.useDecimal;
     this._absMax = this._min * -1 + this._max;
     this.realTimeEvent = options.realTimeEvent || false;
-    this._userInputTimer = null;
 
     this.eventHandler = {
       startChangingSlide: this._startChangingSlide.bind(this),
@@ -236,18 +235,13 @@ class Range {
   }
 
   _changeInput(event) {
-    clearTimeout(this._userInputTimer);
-
     const { keyCode } = event;
-    if (keyCode < keyCodes.DIGIT_0 || keyCode > keyCodes.DIGIT_9) {
+    if (
+      (keyCode < keyCodes.DIGIT_0 || keyCode > keyCodes.DIGIT_9) &&
+      (keyCode < keyCodes.NUMPAD_0 || keyCode > keyCodes.NUMPAD_9)
+    ) {
       event.preventDefault();
-
-      return;
     }
-
-    this._userInputTimer = setTimeout(() => {
-      this._inputSetValue(event.target.value);
-    }, 350);
   }
 
   _inputSetValue(stringValue) {

@@ -464,6 +464,16 @@ export default {
             })
             ['catch']((message) => Promise.reject(message));
         },
+        previewResize: (dimensions = null) => {
+          if (!dimensions) {
+            dimensions = this._graphics.getCurrentDimensions();
+          }
+
+          this._graphics.resize(dimensions).then(() => {
+            this.ui.resizeEditor();
+          });
+        },
+
         reset: (standByMode = false) => {
           const dimensions = this._graphics.getOriginalDimensions();
 

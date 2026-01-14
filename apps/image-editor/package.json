@@ -23,8 +23,8 @@
     "test:types": "tsc --project tests/types",
     "build": "npm run build:clean && npm run build:svg && npm run build:prod && npm run build:minify && node tsBannerGenerator.js",
     "build:clean": "rm -rf ./dist",
-    "build:prod": "webpack",
-    "build:minify": "webpack --env minify",
+    "build:prod": "webpack --env WEBPACK_BUILD",
+    "build:minify": "webpack --env WEBPACK_BUILD --env minify",
     "build:svg": "node makesvg.js",
     "serve": "webpack serve",
     "doc:dev": "tuidoc --serv",
@@ -48,5 +48,8 @@
     "fabric": "^4.2.0",
     "tui-code-snippet": "^2.3.3",
     "tui-color-picker": "^2.2.6"
+  },
+  "devDependencies": {
+    "webpack-cli": "^6.0.1"
   }
 }
